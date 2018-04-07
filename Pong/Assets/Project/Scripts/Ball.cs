@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
 
+    public float difficultyMultiplier = 1.0f;
+
     public float minXSpeed = 0.8f;
     public float maxXSpeed = 1.2f;
     public float minYSpeed = 0.8f;
@@ -28,27 +30,45 @@ public class Ball : MonoBehaviour {
     {
         if (otherCollider.tag == "Limit")
         {
+            GetComponent<AudioSource>().Play();
             if (otherCollider.transform.position.y > transform.position.y && ballRigidbody.velocity.y > 0)
             {
-                ballRigidbody.velocity = new Vector2(ballRigidbody.velocity.x, -ballRigidbody.velocity.y);
+                ballRigidbody.velocity = new Vector2(
+                    ballRigidbody.velocity.x,
+                    -ballRigidbody.velocity.y
+                );
             }
 
             if (otherCollider.transform.position.y < transform.position.y && ballRigidbody.velocity.y < 0)
             {
-                ballRigidbody.velocity = new Vector2(ballRigidbody.velocity.x, -ballRigidbody.velocity.y);
+                ballRigidbody.velocity = new Vector2(
+                    ballRigidbody.velocity.x,
+                    -ballRigidbody.velocity.y
+                );
             }
         }
         else if (otherCollider.tag == "Paddle")
         {
+            GetComponent<AudioSource>().Play();
+
             if (otherCollider.transform.position.x < transform.position.x && ballRigidbody.velocity.x < 0)
             {
-                ballRigidbody.velocity = new Vector2(-ballRigidbody.velocity.x, ballRigidbody.velocity.y);
+                ballRigidbody.velocity = new Vector2(
+                    -ballRigidbody.velocity.x * difficultyMultiplier,
+                    ballRigidbody.velocity.y * difficultyMultiplier
+                );
             }
 
             if (otherCollider.transform.position.x > transform.position.x && ballRigidbody.velocity.x > 0)
             {
-                ballRigidbody.velocity = new Vector2(-ballRigidbody.velocity.x, ballRigidbody.velocity.y);
+                ballRigidbody.velocity = new Vector2(
+                    -ballRigidbody.velocity.x * difficultyMultiplier,
+                    ballRigidbody.velocity.y * difficultyMultiplier
+                );
             }
         }
+
+        Debug.Log("X velocity: " + ballRigidbody.velocity.x);
+        Debug.Log("Y velocity: " + ballRigidbody.velocity.y);
     }
 }
